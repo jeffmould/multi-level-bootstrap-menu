@@ -776,10 +776,20 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
       if (!$parent.hasClass('open')) return
       $parent.trigger(e = $.Event('hide.bs.dropdown'))
       if (e.isDefaultPrevented()) return
-      // Remove the following line of code for support of multi-level menus
-      //$parent.removeClass('open').trigger('hidden.bs.dropdown') 
+      //$parent.removeClass('open').trigger('hidden.bs.dropdown')
     })
   }
+
+  function clearAllMenus() {
+    $(backdrop).remove()
+    $(toggle).each(function (e) {
+      var $parent = getParent($(this))
+      if (!$parent.hasClass('open')) return
+      $parent.trigger(e = $.Event('hide.bs.dropdown'))
+      if (e.isDefaultPrevented()) return
+      $parent.removeClass('open').trigger('hidden.bs.dropdown')
+    })
+  }  
 
   function getParent($this) {
     var selector = $this.attr('data-target')
@@ -830,6 +840,8 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery"
     .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
     .on('click.bs.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
     .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
+    .on('click', clearAllMenus)
+
 
 }(jQuery);
 
